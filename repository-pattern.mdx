@@ -1,0 +1,31 @@
+---
+title: 'Repository pattern: entendendo a abstração de repositorios'
+date: '2024-02-02 09:29:00'
+description: 'Quais são as dores que o repository pattern resolve.'
+lang: pt-br
+tags:
+  - arquitetura
+  - patterns
+  - DB
+---
+
+
+# O que é o repository pattern?
+
+A ideia do repository pattern é abstrair a camada de domínio da forma como os dados são armazenados, 
+isso é feito através de uma interface, a implementação dessa interface é feita por um repositório concreto que conhece a forma como os dados são armazenados.
+
+# Inversão de dependência
+
+O repository pattern é um exemplo de inversão de dependência, pois o service de domínio não 
+depende mais de uma implementação concreta de um repositório, mas sim de uma interface que define o contrato que o repositório deve seguir.
+
+![repository pattern](https://i.imgur.com/8jcEiqF.png)
+
+Assim podemos trocar a implementação do repositório sem que a camada de domínio seja afetada, possibilitando
+a realização de testes unitários sem a necessidade de acessar o banco de dados.
+
+Espero que tenha te ajudado a entender o repository pattern, se tiver alguma dúvida ou sugestão: [Contato](https://preis.tech/contato).
+
+Caso queira saber mais sobre o repository pattern:
+- https://martinfowler.com/eaaCatalog/repository.html
