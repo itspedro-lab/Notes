@@ -3,7 +3,6 @@ title: 'Overengineering in Small Projects: Architecture Lessons with an Arduino'
 date: '2026-01-29'
 description: A story about how a personal Arduino elevator project turned into a practical architecture exercise using events, queues, and a state machine.
 lang: en
-group: overengineering-small-arduino-project
 tags:
     - arduino
     - event-driven

@@ -3,7 +3,6 @@ title: 'Overengineering em Projetos Pequenos: Lições de Arquitetura com um Ard
 date: '2026-01-29'
 description: Um relato sobre como um projeto pessoal com Arduino e elevador acabou se tornando um exercício prático de arquitetura, usando eventos, filas e máquina de estados.
 lang: pt-br
-group: overengineering-small-arduino-project
 tags:
     - arduino
     - event-driven
