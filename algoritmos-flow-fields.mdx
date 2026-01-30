@@ -1,0 +1,69 @@
+---
+title: 'Algoritimos: flow fields'
+date: '2024-01-23 11:05:00'
+description: 'Implementação de um algoritimo de flow fields'
+lang: pt-br
+tags:
+  - algoritimos
+  - javascript
+---
+
+# Introdução
+
+Recentemente encontrei artigos sobre flow fields, que são uma forma interessante de fazer arte digital usando código, (o intuito desse artigo - se caiu de paraquedas - é apenas documentar e anotar coisas que acho interessante, portanto se estiver procurando alguma explicação mais técnica no final tem alguns artigos).
+
+# O grid de ângulos
+
+A explicação mais enxuta que consigo fazer é que flow fields é um grid que cobre toda a área de um canvas e em cada ponto desse grid é armazenado um ângulo, pensando em código seria um array de floating-points.
+
+![Grid](https://cdn.dribbble.com/users/1153599/screenshots/4034313/media/6287fe7ef4e6fd5694d15fa7c7fc16e2.gif)
+
+[source](https://dribbble.com/shots/4034313--flow)
+
+# Implementação
+
+Na minha implementação utilizei as seguintes classes:
+
+`Grid` Responsável por armazenar a matriz de ângulos
+`Particle` Responsável por armazenar o histórico de posição ângulo e velocidade de uma partícula
+`Effect` Resposável por gerar as partículas e grid
+
+
+```typescript
+export class Effect {
+
+  w: number;
+  h: number;
+  particles: Particle[] = [];
+  totalParticles: number = 500;
+  grid: Grid;
+  curve: number = 2.1;
+  zoom: number = 0.09;
+
+  constructor(w: number, h: number) {
+    this.w = w;
+    this.h = h;
+    // gera um grid com celulas de 10x10
+    this.grid = new Grid(10, Math.floor(this.w / 10), Math.floor(this.h / 10));
+    this.init();
+  }
+
+  init() {
+    this.grid.flowField = [];
+    for (let i = 0; i < this.grid.rows; i++) {
+      for (let j = 0; j < this.grid.cols; j++) {
+	    // cheguei esse valor testando
+	    // o zoom aumenta a intensidade do efeito
+	    // já a o curve é para controlar a curva do angulo
+      let angle = (Math.cos(i * this.zoom) + Math.sin(j * this.zoom)) * this.curve;
+      this.grid.flowField.push(angle);
+      }
+    }
+    for (let i = 0; i < this.totalParticles; i++) {
+      this.particles.push(new Particle(this));
+    }
+  }
+}
+```
+
+
