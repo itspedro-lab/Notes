@@ -14,7 +14,7 @@ Em projetos pessoais com hardware, é muito comum começar pelo caminho mais dir
 
 Esse projeto surgiu exatamente nesse contexto, durante o desenvolvimento de um sistema de controle para um elevador usando Arduino. A ideia inicial era simples: enviar comandos a partir de um servidor e executar no hardware. Na prática, isso acabou virando um pequeno exercício de arquitetura.
 
-O objetivo era criar uma “ponte” entre três partes diferentes:
+O objetivo era criar uma "ponte" entre três partes diferentes:
 
 - Um servidor, responsável por emitir comandos  
 - Uma aplicação intermediária, responsável por organizar o fluxo  
@@ -26,13 +26,13 @@ Em vez de tudo se comunicar diretamente, a proposta foi estruturar esse fluxo de
 
 De forma resumida, o fluxo segue este caminho:
 
-O servidor publica um comando.  
-A aplicação recebe esse evento.  
-O comando entra em uma fila interna.  
+Servidor publica um comando.  
+Aplicação recebe esse evento.  
+Comando entra em uma fila interna.  
 É validado e formatado.  
 É enviado pela porta serial.  
-O Arduino executa a ação.  
-O status retorna para o servidor.
+Arduino executa a ação.  
+Status retorna para o servidor.
 
 No contexto do elevador, isso significava transformar ações como subir, descer, abrir portas e parar em eventos bem definidos, evitando comandos concorrentes ou fora de ordem.
 
@@ -62,15 +62,7 @@ Um dos principais problemas era a comunicação serial.
 
 Se dois comandos tentassem ser enviados ao mesmo tempo, o sistema quebrava. No elevador, isso podia significar movimentos inesperados ou perda de controle. A solução foi criar uma fila única de processamento com um worker dedicado para a serial, com isso, os comandos passaram a ser executados em ordem, sem conflitos. Em vez de tratar erros como exceções raras, o projeto passou a encará-los como parte natural do fluxo, o que deixou o sistema muito mais previsível.
 
-O mais interessante desse projeto não foi o resultado final, mas o processo. Ele mostrou, na prática, que:
-
-- Projetos pequenos também precisam de arquitetura  
-- Eventos reduzem acoplamento  
-- Filas organizam concorrência  
-- Estados evitam comportamentos inesperados  
-- Erros precisam ser modelados  
-
-Conceitos que aparecem em sistemas maiores começaram a surgir naturalmente, mesmo em um projeto pessoal.
+O mais interessante desse projeto não foi o resultado final, mas o processo. Ele mostrou que projetos pequenos as vezes também precisam de arquitetura assim conceitos que aparecem em sistemas maiores começaram a surgir naturalmente, mesmo em um projeto pessoal.
 
 ## Limitações e Caminhos Mais Simples
 
