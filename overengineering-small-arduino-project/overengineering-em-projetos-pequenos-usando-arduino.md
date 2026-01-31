@@ -78,4 +78,4 @@ Projetos pessoais, quando levados a sério, acabam sendo excelentes professores.
 
 ---
 
-*Se você chegou até aqui, provavelmente também gosta de transformar ideias simples em sistemas desnecessariamente complexos e aprender com isso. 😅*
+*Se você chegou até aqui, provavelmente também gosta de transformar ideias simples em sistemas desnecessariamente complexos e aprender com isso. 😅 Se tiver sugestões, críticas ou ideias, vou gostar de ouvir.*

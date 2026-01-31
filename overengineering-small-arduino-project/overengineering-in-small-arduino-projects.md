@@ -10,11 +10,11 @@ tags:
 ---
 ## The Core Idea
 
-In personal hardware projects, it’s very common to start with the most straightforward approach: open the serial port, send commands, and wait for responses. At first, it works. But as the project grows, issues begin to appear: blocking, message loss, unpredictable behavior, and maintenance difficulties.
+In personal hardware projects, it's very common to start with the most straightforward approach: open the serial port, send commands, and wait for responses. At first, it works. But as the project grows, issues begin to appear: blocking, message loss, unpredictable behavior, and maintenance difficulties.
 
 This project emerged exactly in that context, during the development of an elevator control system using Arduino. The initial idea was simple: send commands from a server and execute them on the hardware. In practice, it turned into a small architecture exercise.
 
-The goal was to create a “bridge” between three different parts:
+The goal was to create a "bridge" between three different parts:
 
 - A server, responsible for emitting commands  
 - An intermediary application, responsible for organizing the flow  
@@ -74,10 +74,10 @@ An architecture based on WebSocket or MQTT would eliminate the need for the inte
 
 More than controlling an elevator with Arduino, this project served to experiment, make mistakes, adjust, and better understand how event-driven systems work in practice.
 
-It reinforced something I’ve been realizing over time: it’s not the size of a project that defines how much it teaches, but how much you care about structuring it well.
+It reinforced something I've been realizing over time: it's not the size of a project that defines how much it teaches, but how much you care about structuring it well.
 
 Personal projects, when taken seriously, end up being excellent teachers.
 
 ---
 
-*If you’ve made it this far, you probably also enjoy turning simple ideas into unnecessarily complex systems and learning from them. 😅*
+*If you've made it this far, you probably also enjoy turning simple ideas into unnecessarily complex systems and learning from it. 😅 If you have any suggestions, feedback, or ideas, I'd be happy to hear them.*
