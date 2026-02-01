@@ -8,76 +8,56 @@ tags:
     - event-driven
     - fsm
 ---
-## The Core Idea
+## Core Concept
 
-In personal hardware projects, it's very common to start with the most straightforward approach: open the serial port, send commands, and wait for responses. At first, it works. But as the project grows, issues begin to appear: blocking, message loss, unpredictable behavior, and maintenance difficulties.
+In personal hardware projects, it's common to take the most direct path: open the serial port, send commands, and wait for responses. While this works initially, as the project scales, unpredictable behaviors and maintenance hurdles start to emerge.
 
-This project emerged exactly in that context, during the development of an elevator control system using Arduino. The initial idea was simple: send commands from a server and execute them on the hardware. In practice, it turned into a small architecture exercise.
+This project was born in exactly that context while developing a control system for an Arduino-based elevator. The initial idea was simple: send commands from a server to be executed by the hardware. In practice, however, it turned out to be an exercise in software architecture.
 
-The goal was to create a "bridge" between three different parts:
+The goal was to build a "bridge" between three distinct parts:
 
-- A server, responsible for emitting commands  
-- An intermediary application, responsible for organizing the flow  
-- An Arduino, responsible for the physical execution of the elevator  
+- The Server Responsible for issuing commands.
+- The Intermediate Application: Responsible for orchestrating the flow.
+- The Arduino Responsible for the physical execution of the elevator.
 
-Instead of having everything communicate directly, the proposal was to structure the flow asynchronously, using events, queues, and well-defined states, bringing more predictability and reducing common problems in projects like this.
+Instead of direct communication, the proposal was to structure this flow asynchronously using events, queues, and well-defined states, bringing more predictability to the system.
 
-## How the System Works
+## How It Works
 
-In short, the flow follows this path:
+Briefly, the flow follows this path:
 
-Server publishes a command.  
-Application receives the event.  
-Command enters an internal queue.  
-It is validated and formatted.  
-It is sent through the serial port.  
-Arduino executes the action.  
-Status returns to the server.
+Command -> Event -> Queue -> Validation -> Serial -> Execution -> Status
 
-In the context of the elevator, this meant transforming actions like going up, going down, opening doors, and stopping into well-defined events, avoiding concurrent or out-of-order commands.
+Server publishes a command.
+Application receives this event.
+Command enters an internal queue.
+It is validated and formatted.
+It is sent via serial port.
+Arduino executes the action.
+Status is returned to the server.
 
-This decoupling was essential to keep the system stable. Each part had a clear responsibility, and the use of events allowed them to operate independently.
+In the context of the elevator, this meant transforming actions like *up*, *down*, *open doors*, and *stop* into well-defined events, preventing concurrent or out-of-order commands.
 
-## The Importance of the State Machine
+## State Machine
 
-To control this flow, I implemented a finite state machine (FSM).
+To control this flow, I implemented a Finite State Machine (FSM). Each step of the process was represented by a state, such as:
 
-Each stage of the process was represented by a state, such as:
+Idle | Receiving | Processing | Sending | Waiting | Done | Error
 
-- Idle  
-- Receiving command  
-- Processing  
-- Sending  
-- Waiting for response  
-- Finished  
-- Error  
+In the elevator's case, the FSM helped prevent inconsistent states—like trying to move with the door open, changing direction mid-motion, or accepting commands while an action was still in progress. This became one of the most critical parts of the project.
 
-In the case of the elevator, the FSM helped prevent situations like trying to move up with the door open, changing direction mid-movement, or accepting commands while still executing.
+## Handling Concurrency and Blockage
 
-This prevented the system from entering inconsistent states. The FSM ended up being one of the most important parts of the project.
+One of the main challenges was serial communication. If two commands tried to go out at once, the system would crash.
 
-## Dealing with Concurrency and Blocking
+The solution was to create a single processing queue with a dedicated worker for the serial port. This ensured commands were executed sequentially without conflicts. Instead of treating errors as rare exceptions, the project integrated them into the natural flow, making the system much more resilient.
 
-One of the main problems was serial communication.
+To be honest: today, using an ESP32 with Wi-Fi and MQTT would probably solve half of these issues in much less time. An architecture based on WebSockets or MQTT would eliminate the need for the intermediate app.
 
-If two commands tried to be sent at the same time, the system would break. In the elevator, this could mean unexpected movements or loss of control. The solution was to create a single processing queue with a dedicated serial worker. As a result, commands were executed in order, without conflicts.
-
-Instead of treating errors as rare exceptions, the project began to see them as a natural part of the flow, which made the system much more predictable.
-
-The most interesting part of this project was not the final result, but the process. It showed that small projects sometimes also need architecture, and that concepts seen in larger systems naturally emerge, even in personal projects.
-
-## Limitations and Simpler Paths
-
-To be honest: today, using an ESP32 with Wi-Fi and MQTT would probably solve half of this in much less time.
-
-An architecture based on WebSocket or MQTT would eliminate the need for the intermediary application, but it would also remove much of the learning experience. This project was, above all, a laboratory to understand how to organize systems that interact with the physical world.
-
-More than controlling an elevator with Arduino, this project served to experiment, make mistakes, adjust, and better understand how event-driven systems work in practice.
-
-It reinforced something I've been realizing over time: it's not the size of a project that defines how much it teaches, but how much you care about structuring it well.
+However, that would have also eliminated most of the learning. This project served as a laboratory to understand how to organize systems that interact with the physical world. It reinforced something I've noticed over time: it's not the size of the project that defines how much it teaches you, but how much care you put into its structure.
 
 Personal projects, when taken seriously, end up being excellent teachers.
 
 ---
 
-*If you've made it this far, you probably also enjoy turning simple ideas into unnecessarily complex systems and learning from it. 😅 If you have any suggestions, feedback, or ideas, I'd be happy to hear them.*
+*If you've made it this far, you probably also enjoy turning simple ideas into "unnecessarily" complex systems just to learn from them. 😅 If you have suggestions, critiques, or ideas, I'd love to hear them.*
